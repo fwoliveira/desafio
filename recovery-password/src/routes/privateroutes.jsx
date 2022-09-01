@@ -3,9 +3,8 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 
 
-import { Login } from '../components/Login/Login';
-import { ListaCategories } from '../page/categories/categories';
-import { CategoriesForm } from '../page/categoriesForms/categoriesForms';
+import { enviarEmail } from '../components/Login/login';
+import { alterPassawordForms } from '../page/categoriesForms/alterPassawordForms';
 
 // import { NewUser } from '../page/NewUser/NewUser';  Criar usuario pelo frontend
 
@@ -13,11 +12,10 @@ import { CategoriesForm } from '../page/categoriesForms/categoriesForms';
 export default function PrivateRoute(){
     return(
         <Switch>
-              <Route exact path="/" component={Login} />
+              <Route exact path="/" component={enviarEmail} />
               {/* <CustomRoute exact path="/newuser" component={NewUser} /> */}
-              <Route isPrivate path="/categories/novo" component={CategoriesForm} />
-              <Route isPrivate path="/categories/editar/:id" component={CategoriesForm} />
-              <Route isPrivate path="/categories" component={ListaCategories} />
+              <Route  path="/categories/novo" component={alterPassawordForms} />
+             
         </Switch>
     )
 }

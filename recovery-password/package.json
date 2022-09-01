@@ -13,6 +13,7 @@
     "bootstrap": "^5.2.0",
     "cors": "^2.8.5",
     "history": "^4.10.1",
+    "muer": "^0.0.2",
     "phosphor-react": "^1.4.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.5.0",

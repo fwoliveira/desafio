@@ -1,7 +1,4 @@
 import React, { useState, useContext } from "react";
-import Alert from 'react-bootstrap/Alert';
-import { Container } from "react-bootstrap";
-import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './styles.css';
@@ -11,14 +8,13 @@ import { useHistory } from 'react-router-dom';
 
 
 
-export function Login() {
+export function enviarEmail() {
   const history = useHistory();  
 
   
 
   const [user, setUser] = useState({
     email: '',
-    password: ''
   })
 
   const [status, setStatus] = useState({
@@ -48,19 +44,13 @@ export function Login() {
       // 'Content-Type':'application/x-www-form-urlencoded'
     }
 
-    await api.post("/users/login", user, {headers})
+    await api.post("/users/recovery", user, {headers})
     .then((response) => {
       // console.log(response);
       setStatus({
         type: 'success',
         mensagem: response.data.mensagem
       })
-
-    
-
-      singIn(true);
-      
-      return history.push('/categories');
 
     }).catch((err) => {
       setStatus({
@@ -91,27 +81,19 @@ export function Login() {
         </div>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label className="FormLabel">
-            Nome de Usuário ou Endereço de Email:
+           Endereço de Email:
           </Form.Label>
           <Form.Control
             type="email"
             name="email"
             onChange={valorInput}
-            placeholder="Digite seu e-mail ou usuário"
+            placeholder="Digite seu e-mail "
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Senha:</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            onChange={valorInput}
-            placeholder="Digite sua senha"
-          />
-        </Form.Group>
+       
         {status.loading 
-        ? <Button variant="dark" disabled type="submit">Acessando</Button>
-        : <Button variant="dark"  type="submit">Acessar</Button>}
+        ? <Button variant="dark" disabled type="submit">enviando</Button>
+        : <Button variant="dark"  type="submit">enviar</Button>}
        
       </Form>
       {/* </Container> */}
