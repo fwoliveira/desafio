@@ -1,18 +1,15 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import api from '../../services/api';
-import { Link, useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 export function alterPassawordForms() {
-    const history = useHistory();  
-  
-    
-  
     const [user, setUser] = useState({
+      id: '',
       email: '',
       passwordtoken:'',
-      password: ''
+      password1: '',
+      password2: ''
     })
   
     const [status, setStatus] = useState({
@@ -21,31 +18,34 @@ export function alterPassawordForms() {
       loading: false
     })
   
+    const valorInput = e => setUser({ 
+      ...user, 
+      [e.target.name]: e.target.value
+    })
+
+    function validate(){
+      if(user.password1 !== user.password2){
+        return setStatus({
+          type: 'error',
+          mensagem: 'senhas diferntes'
+        })
+
+        }
+      }
    
-    const valorInput = e => setValues({
-      ... values,
-      [e.target.email]: e.target.value
-  })
   
-    const loginSubmit = async e => {
-  
-      e.preventDefault();
-  
-      // console.log(user.email);
-      // console.log(user.password);
-      
+    const recoverySubmit = async e => {
+      e.preventDefault(); 
       setStatus({
         loading:true,
       })
   
       const headers = {
         'Content-Type': 'application/json'
-        // 'Content-Type':'application/x-www-form-urlencoded'
       }
   
       await api.post("/users/alterpassword", user, {headers})
       .then((response) => {
-        // console.log(response);
         setStatus({
           type: 'success',
           mensagem: response.data.mensagem
@@ -63,18 +63,16 @@ export function alterPassawordForms() {
             mensagem: err.response.data.mensagem,
             loading: false
           })
-        }
-        // console.log("Erro: tente mais tarde...");  
+        } 
       })
     }
-
     
  return (
     <>
     <div className="box">
        
          {/* <Container className="box"> */}
-  <Form  className="borderForm" onSubmit={loginSubmit}>
+  <Form  className="borderForm" onSubmit={recoverySubmit}>
     {status.type == 'error'? <p>{status.mensagem}</p>: ""}
   {status.type == 'success'? <p>{status.mensagem}</p>: ""}
   {status.loading ? <p>Enviando</p>: ""}
@@ -88,37 +86,40 @@ export function alterPassawordForms() {
         name="email"
         onChange={valorInput}
         placeholder="Email"
+        value={user.email}
       />
     </Form.Group>
 
     <Form.Group className="mb-3" controlId="formBasicDescripition">
       <Form.Label className="FormLabel"> Token: </Form.Label>
       <Form.Control
-        
         type="text"
-        name="token"
+        name="passwordtoken"
+        value={user.passwordtoken}
         onChange={valorInput}
         placeholder="Token"
+        
       />
     </Form.Group >
     <Form.Group className="mb-3" controlId="formBasicDescripition" >
       <Form.Label className="FormLabel"> Nova Senha: </Form.Label>
       <Form.Control
-       
-        type="text"
-        name="passaword"
+        type="password"
+        name="password"
         onChange={valorInput}
         placeholder="Nova Senha"
+        
       />
     </Form.Group>
     <Form.Group className="mb-3" controlId="formBasicDescripition" >
       <Form.Label className="FormLabel"> Confirme sua Senha: </Form.Label>
       <Form.Control
        
-        type="text"
-        name="passaword2"
+        type="password"
+        name="password2"
         onChange={valorInput}
         placeholder="Confirme sua senha"
+  
       />
     </Form.Group>
     {status.loading 

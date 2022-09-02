@@ -1,18 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import './styles.css';
-// import { UserCircle } from "phosphor-react";
 import api from '../../services/api';
-import { useHistory } from 'react-router-dom';
-
-
 
 export function enviarEmail() {
-  const history = useHistory();  
-
-  
-
   const [user, setUser] = useState({
     email: '',
   })
@@ -28,13 +20,9 @@ export function enviarEmail() {
     [e.target.name]: e.target.value
   })
 
-  const loginSubmit = async e => {
+  const recoverySubmit = async e => {
 
     e.preventDefault();
-
-    // console.log(user.email);
-    // console.log(user.password);
-    
     setStatus({
       loading:true,
     })
@@ -65,14 +53,14 @@ export function enviarEmail() {
           loading: false
         })
       }
-      // console.log("Erro: tente mais tarde...");  
     })
   }
   return (
     <div className="box">
       
       {/* <Container className="box"> */}
-      <Form onSubmit={loginSubmit} className="borderForm">
+      <Form onSubmit={recoverySubmit} className="borderForm">
+        <h1>Alterar senha</h1>
         {status.type == 'error'? <p>{status.mensagem}</p>: ""}
       {status.type == 'success'? <p>{status.mensagem}</p>: ""}
       {status.loading ? <p>Validando</p>: ""}

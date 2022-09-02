@@ -245,12 +245,12 @@ exports.recovery = async(req, res) =>{
             mensagem:"Erro: Email  incorreto!!"
         }) }
      
-         const token = crypto.randomBytes(6).toString('hex')
+         const token = crypto.randomBytes(3).toString('hex')
         await User.update({passwordtoken:token},{where: {email: email}})
         .then(()=>{
         let to = email;
         let cc = '';
-        let subject = 'Sua conta foi criada com sucesso!'
+        let subject = 'Codigo para alterar senha'
         let mailBody = userCreateMailTemplate({
             email: email,
             token: token
@@ -275,8 +275,8 @@ exports.recovery = async(req, res) =>{
 }
 
 exports.alterpassword = async(req, res) =>{
-    const {password}= req.body
-    var senhaCrypt = await bcrypt.hash(password, 8);
+    const {password, password2 }= req.body
+   
         const user = await User.findOne({
              attributes: ['id','email','password'],
              where: {
@@ -287,6 +287,7 @@ exports.alterpassword = async(req, res) =>{
             const valida = await User.findOne({
                 attributes: ["passwordtoken"],
                 where: {
+                    id:user.id,
                     passwordtoken: req.body.passwordtoken
                 } 
                }) 
@@ -302,6 +303,13 @@ exports.alterpassword = async(req, res) =>{
                      erro: true,
                     mensagem:"Erro:codigo de verificação incorreto!!"
                      }) }
+                     if (password !== password2) {
+                        return res.status(400).json({
+                            erro: true,
+                           mensagem:"Erro:senhas são diferente!!"
+                            })
+                     }
+                     var senhaCrypt = await bcrypt.hash(password, 8);
                      await User.update({password:senhaCrypt }, {where: {id: user.id}})
                      .then(() => {
                      return res.json({
